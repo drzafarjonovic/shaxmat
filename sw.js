@@ -2,7 +2,7 @@
    - Ilova qobig'i (shell) oflayn ishlaydi
    - index.html har doim avval tarmoqdan olinadi (yangi versiya darhol keladi)
    - Lichess/YouTube kabi tashqi so'rovlar keshlanmaydi: real vaqt ma'lumoti doim yangi */
-const CACHE = 'wcc2026-shell-v6';
+const CACHE = 'wcc2026-shell-v7';
 const SHELL = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './icons/icon-maskable-512.png', './icons/logo-96.png', './icons/favicon-32.png'];
 
 self.addEventListener('install', e => {

@@ -603,6 +603,45 @@
       .eval-bar { width: 20px; }
       .eval-lbl { font-size: 8px; }
     }
+  
+    /* === GROUPED MULTI-VIEW APP NAVIGATION & NEWS AUTO-TRANSLATION === */
+    body.tabbed-app main > section.section,
+    body.tabbed-app main > section.hero {
+      display: none !important;
+      animation: viewFade 0.22s ease;
+    }
+    body.tabbed-app main > section.view-active {
+      display: block !important;
+    }
+    @keyframes viewFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .app-group-bar {
+      position: sticky; top: 58px; z-index: 45;
+      background: var(--bg-glass, rgba(14, 24, 56, 0.92));
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    [data-theme="light"] .app-group-bar { background: rgba(255, 255, 255, 0.92); }
+    .app-group-inner {
+      display: flex; align-items: center; gap: 6px; padding: 8px 0;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .app-group-inner::-webkit-scrollbar { display: none; }
+    .grp-btn {
+      flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 700;
+      border: 1px solid var(--line); background: transparent; color: var(--muted);
+      transition: all 0.18s ease; white-space: nowrap;
+    }
+    .grp-btn:hover { color: var(--text); border-color: rgba(217, 180, 90, 0.5); }
+    .grp-btn.active {
+      background: rgba(217, 180, 90, 0.18); border-color: #D9B45A; color: var(--text);
+    }
+    .tr-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px;
+      background: rgba(0, 180, 216, 0.14); color: #38bdf8; border: 1px solid rgba(0, 180, 216, 0.3);
+    }
+    [data-theme="light"] .tr-badge { color: #0369a1; }
   </style>
 </head>
 <body>
@@ -649,6 +688,15 @@
       </div>
     </div>
   </header>
+  <nav class="app-group-bar" id="appGroupBar" aria-label="Bo‘limlar menyusi">
+    <div class="wrap app-group-inner">
+      <button type="button" class="grp-btn active" data-view="match">🏆 Match &amp; Statistika</button>
+      <button type="button" class="grp-btn" data-view="live">📺 Jonli efir &amp; Stockfish</button>
+      <button type="button" class="grp-btn" data-view="tournament">📊 Natijalar &amp; Taqvim</button>
+      <button type="button" class="grp-btn" data-view="news">📰 Yangiliklar (UZ)</button>
+      <button type="button" class="grp-btn" data-view="settings">⚙️ Sozlamalar</button>
+    </div>
+  </nav>
 
   <main>
     <!-- ================= HERO: MATCH ================= -->
@@ -1019,7 +1067,7 @@
     <a href="#match" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10 12 3l9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span data-i18n="tabMatch">Match</span></a>
     <a href="#live" class="live-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg><span data-i18n="tabLive">Efir</span></a>
     <a href="#results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span data-i18n="tabResults">Hisob</span></a>
-    <a href="#schedule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span data-i18n="tabSched">Taqvim</span></a>
+    <a href="#news"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span data-i18n="navNews">Yangiliklar</span></a>
     <button type="button" id="notifTab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span data-i18n="tabNotif">Xabarlar</span></button>
   </nav>
 
@@ -1131,14 +1179,14 @@
       { name: 'Chess.com', url: 'https://www.chess.com/rss/news', category: 'chesscom' }
     ],
     news: [
-      { id: 'n1', category: 'fide', source: 'FIDE', date: '2026-11-23', title: 'World Championship Match 2026 opens in Geneva at a historic venue', summary: 'Jenevadagi Fondation Martin Bodmer’da match tantanali ochildi. Qur’aga ko‘ra Javohir Sindarov 1-partiyani oq donalarda boshlaydi.', url: 'https://www.fide.com/world-championship-match-2026-opens-in-geneva-at-a-historic-venue/' },
-      { id: 'n2', category: 'chesscom', source: 'Chess.com', date: '2026-11-23', title: 'Sindarov Gets White As Gukesh Vows To Win World Championship', summary: 'Ochilish marosimida Sindarov 1-partiya uchun oq donalarni oldi. Gukesh unvonni himoya qilishga tayyorligini aytdi.', url: 'https://www.chess.com/news/view/2026-fide-chess-world-championship-opening-ceremony' },
-      { id: 'n3', category: 'fide', source: 'FIDE', date: '2026-11-23', title: 'The two World Championship contenders open up to the media', summary: 'Matbuot anjumanida ikki 20 yoshli grossmeyster tayyorgarlik va bosim haqida gapirdi.', url: 'https://www.fide.com/the-two-world-championship-contenders-open-up-to-the-media/' },
-      { id: 'n4', category: 'sindarov', source: 'FIDE', date: '2026-11-13', title: 'Javokhir Sindarov is writing a new page in chess history', summary: '2025-yilgi Jahon kubogi va 2026-yilgi Nomzodlar turniri g‘olibi O‘zbekiston shaxmati tarixida yangi sahifa ochmoqda.', url: 'https://www.fide.com/javokhir-sindarov-is-writing-a-new-page-in-chess-history/' },
-      { id: 'n5', category: 'gukesh', source: 'Chess.com', date: '2026-11-17', title: 'Gukesh Opens Up About Pressure, Criticism Ahead Of Sindarov Match', summary: 'Gukesh 2026-yilgi qiyin mavsum va matchga ruhiy tayyorgarlik haqida gapirdi.', url: 'https://www.chess.com/news/view/gukesh-pressure-sindarov-world-championship' },
-      { id: 'n6', category: 'analysis', source: 'Chess.com', date: '2026-11-10', title: 'Gukesh-Sindarov Predictions: Kasparov, Nakamura, Carlsen & More', summary: 'Afsonaviy chempionlar va yetakchi grossmeysterlarning match bo‘yicha taxminlari.', url: 'https://www.chess.com/news/view/gukesh-sindarov-predictions-kasparov-nakamura' },
-      { id: 'n7', category: 'analysis', source: 'FIDE', date: '2026-11-19', title: 'Gukesh and Sindarov set for World Championship showdown', summary: 'Tarixdagi eng yosh jahon chempionligi bahsi: ikkala raqib ham 20 yoshda.', url: 'https://www.fide.com/gukesh-and-sindarov-set-for-world-championship-showdown/' },
-      { id: 'n8', category: 'gukesh', source: 'FIDE', date: '2026-11-07', title: 'The young king faces his toughest challenge', summary: 'Gukeshning chempionlik yo‘li va Jenevadagi birinchi unvon himoyasi.', url: 'https://www.fide.com/the-young-king-faces-his-toughest-challenge/' }
+      { id: 'n1', category: 'fide', source: 'FIDE', date: '2026-11-23', title: 'Jahon chempionati 2026 Jenevadagi tarixiy majmuada tantanali ochildi', summary: 'Jenevadagi Fondation Martin Bodmer’da match tantanali ochildi. Qur’aga ko‘ra Javohir Sindarov 1-partiyani oq donalarda boshlaydi.', url: 'https://www.fide.com/world-championship-match-2026-opens-in-geneva-at-a-historic-venue/' },
+      { id: 'n2', category: 'chesscom', source: 'Chess.com', date: '2026-11-23', title: 'Sindorov 1-partiyada oq donalarni oldi, Gukesh unvonni himoya qilishga va’da berdi', summary: 'Ochilish marosimida Sindarov 1-partiya uchun oq donalarni oldi. Gukesh unvonni himoya qilishga tayyorligini aytdi.', url: 'https://www.chess.com/news/view/2026-fide-chess-world-championship-opening-ceremony' },
+      { id: 'n3', category: 'fide', source: 'FIDE', date: '2026-11-23', title: 'Jahon chempionligi uchun ikki da’vogar matbuot anjumanida fikr bildirdi', summary: 'Matbuot anjumanida ikki 20 yoshli grossmeyster tayyorgarlik va bosim haqida gapirdi.', url: 'https://www.fide.com/the-two-world-championship-contenders-open-up-to-the-media/' },
+      { id: 'n4', category: 'sindarov', source: 'FIDE', date: '2026-11-13', title: 'Javohir Sindorov shaxmat tarixida yangi sahifa ochmoqda', summary: '2025-yilgi Jahon kubogi va 2026-yilgi Nomzodlar turniri g‘olibi O‘zbekiston shaxmati tarixida yangi sahifa ochmoqda.', url: 'https://www.fide.com/javokhir-sindarov-is-writing-a-new-page-in-chess-history/' },
+      { id: 'n5', category: 'gukesh', source: 'Chess.com', date: '2026-11-17', title: 'Gukesh Sindorovga qarshi match oldidan bosim va tanqidlar haqida gapirdi', summary: 'Gukesh 2026-yilgi qiyin mavsum va matchga ruhiy tayyorgarlik haqida gapirdi.', url: 'https://www.chess.com/news/view/gukesh-pressure-sindarov-world-championship' },
+      { id: 'n6', category: 'analysis', source: 'Chess.com', date: '2026-11-10', title: 'Gukesh — Sindorov taxminlari: Kasparov, Nakamura, Karlsen va boshqalar', summary: 'Afsonaviy chempionlar va yetakchi grossmeysterlarning match bo‘yicha taxminlari.', url: 'https://www.chess.com/news/view/gukesh-sindarov-predictions-kasparov-nakamura' },
+      { id: 'n7', category: 'analysis', source: 'FIDE', date: '2026-11-19', title: 'Gukesh va Sindorov Jahon chempionligi bahsiga tayyor', summary: 'Tarixdagi eng yosh jahon chempionligi bahsi: ikkala raqib ham 20 yoshda.', url: 'https://www.fide.com/gukesh-and-sindarov-set-for-world-championship-showdown/' },
+      { id: 'n8', category: 'gukesh', source: 'FIDE', date: '2026-11-07', title: 'Yosh chempion o‘z faoliyatidagi eng jiddiy sinov qarshisida', summary: 'Gukeshning chempionlik yo‘li va Jenevadagi birinchi unvon himoyasi.', url: 'https://www.fide.com/the-young-king-faces-his-toughest-challenge/' }
     ]
   };
 
@@ -2562,6 +2610,164 @@
   updateSlotUi();
   updateMediaSession();
   setTimeout(() => SF.evaluate(boardCache[app.viewRound ?? live.activeRound]?.fen || START_FEN, true), 900);
+
+  /* =======================================================================
+     13. GURUHLANGAN MENYU ROUTERI (TABBED APP) + AVTOMATIK YANGILIK TARJIMONI
+     ======================================================================= */
+  const VIEW_GROUPS = {
+    match: ['match', 'stats'],
+    live: ['live'],
+    tournament: ['results', 'schedule'],
+    news: ['news'],
+    settings: ['settings']
+  };
+  const HASH_TO_VIEW = {
+    '#match': 'match', '#stats': 'match',
+    '#live': 'live',
+    '#results': 'tournament', '#schedule': 'tournament',
+    '#news': 'news',
+    '#settings': 'settings'
+  };
+
+  let activeView = 'match';
+  function switchView(viewName, scrollTop = true) {
+    if (!VIEW_GROUPS[viewName]) viewName = 'match';
+    activeView = viewName;
+    document.body.classList.add('tabbed-app');
+
+    // Show only sections in the active group
+    const activeIds = VIEW_GROUPS[viewName];
+    document.querySelectorAll('main > section').forEach(sec => {
+      sec.classList.toggle('view-active', activeIds.includes(sec.id));
+    });
+
+    // Open settings <details> automatically when Settings tab is opened
+    if (viewName === 'settings') {
+      const det = document.querySelector('#settings details');
+      if (det) det.open = true;
+    }
+
+    // Sync active state on Group Bar, Top Nav, and Bottom Mobile Nav
+    document.querySelectorAll('#appGroupBar .grp-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.view === viewName);
+    });
+    document.querySelectorAll('.main-nav a, .bottom-nav a').forEach(a => {
+      const mapped = HASH_TO_VIEW[a.getAttribute('href')] || 'match';
+      a.classList.toggle('active', mapped === viewName);
+    });
+
+    if (scrollTop) window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (viewName === 'news') translateAllNews();
+  }
+
+  // Intercept all internal #hash links (brand, header nav, bottom nav, "Efirni ko'rish" button)
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const h = a.getAttribute('href');
+    if (HASH_TO_VIEW[h]) {
+      e.preventDefault();
+      switchView(HASH_TO_VIEW[h], true);
+      try { history.replaceState(null, '', h); } catch (err) {}
+    }
+  });
+
+  $('appGroupBar').addEventListener('click', e => {
+    const b = e.target.closest('[data-view]');
+    if (!b) return;
+    switchView(b.dataset.view, true);
+  });
+
+  window.addEventListener('hashchange', () => {
+    const v = HASH_TO_VIEW[location.hash];
+    if (v) switchView(v, true);
+  });
+
+  // --- Automatic English -> Uzbek / Russian News Translator (MyMemory API + Cache) ---
+  const trCache = store.get('wcc_news_tr_v1', {});
+  const isLikelyEnglish = txt => {
+    if (!txt || txt.length < 6) return false;
+    if (/[а-яА-ЯёЁ]/.test(txt)) return false;
+    if (/o‘|g‘|shaxmat|partiya|chempion|durang|g‘alaba|sindorov|boshlandi|ochildi/i.test(txt)) return false;
+    return /(the|and|for|with|world|chess|championship|game|draw|wins|after|round|against|in|to|of)/i.test(txt);
+  };
+
+  async function translateText(text, targetLang) {
+    const clean = (text || '').trim();
+    if (!clean || targetLang === 'en') return clean;
+    const key = targetLang + ':' + clean.slice(0, 140);
+    if (trCache[key]) return trCache[key];
+    try {
+      const q = clean.slice(0, 450);
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=en|${encodeURIComponent(targetLang)}`);
+      if (!res.ok) return clean;
+      const data = await res.json();
+      const out = data?.responseData?.translatedText;
+      if (out && out.trim() && !/MYMEMORY WARNING/i.test(out)) {
+        trCache[key] = out.trim();
+        store.set('wcc_news_tr_v1', trCache);
+        return out.trim();
+      }
+    } catch (e) {}
+    return clean;
+  }
+
+  let translatingNews = false;
+  async function translateAllNews() {
+    if (translatingNews || app.lang === 'en' || !navigator.onLine) return;
+    const target = app.lang === 'ru' ? 'ru' : 'uz';
+    const pending = CFG.news.filter(n => (!n['title_' + target] && isLikelyEnglish(n.title)) || (!n['sum_' + target] && isLikelyEnglish(n.summary))).slice(0, 8);
+    if (!pending.length) return;
+    translatingNews = true;
+    const stEl = $('rssStatus');
+    if (stEl) stEl.textContent = 'Yangiliklar o‘zbek tiliga avtomatik tarjima qilinmoqda…';
+    let changed = false;
+    for (const item of pending) {
+      if (!item['title_' + target] && isLikelyEnglish(item.title)) {
+        const t = await translateText(item.title, target);
+        if (t !== item.title) { item['title_' + target] = t; changed = true; }
+      }
+      if (!item['sum_' + target] && isLikelyEnglish(item.summary)) {
+        const s = await translateText(item.summary, target);
+        if (s !== item.summary) { item['sum_' + target] = s; changed = true; }
+      }
+    }
+    translatingNews = false;
+    if (changed) { save(); renderNews(); }
+    if (stEl) stEl.textContent = 'Yangiliklar o‘zbek tilida tayyor.';
+  }
+
+  // Override renderNews to show translated Uzbek/Russian titles & summaries automatically
+  const _origRenderNews = renderNews;
+  renderNews = function () {
+    const d = T();
+    const lang = app.lang === 'ru' ? 'ru' : app.lang === 'en' ? 'en' : 'uz';
+    const list = CFG.news.filter(n => app.newsCat === 'all' || n.category === app.newsCat)
+      .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    $('newsGrid').innerHTML = list.length ? list.map(n => {
+      const title = (lang !== 'en' && n['title_' + lang]) ? n['title_' + lang] : n.title;
+      const summary = (lang !== 'en' && n['sum_' + lang]) ? n['sum_' + lang] : n.summary;
+      const wasTr = lang !== 'en' && (n['title_' + lang] || n['sum_' + lang]);
+      return `
+      <a class="card news-item" href="${esc(n.url)}" target="_blank" rel="noopener">
+        <span class="news-src"><b>${esc(n.source)}</b>${wasTr ? '<span class="tr-badge">🇺🇿 Avto-tarjima</span>' : ''}<time>${esc(n.date)}</time></span>
+        <h3>${esc(title)}</h3>
+        <p>${esc(summary)}</p>
+      </a>`;
+    }).join('') : `<p class="hint">${esc(d.noNews)}</p>`;
+  };
+
+  // Trigger auto-translation after RSS sync as well
+  const _origSyncRss = syncRss;
+  syncRss = async function (manual = false) {
+    await _origSyncRss(manual);
+    translateAllNews();
+  };
+
+  // Initialize grouped tabbed view on load
+  const initView = HASH_TO_VIEW[location.hash] || 'match';
+  switchView(initView, false);
+  setTimeout(translateAllNews, 1200);
 </script>
 </body>
 </html>
