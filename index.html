@@ -530,6 +530,79 @@
       *, *::before, *::after { animation: none !important; transition: none !important; }
       html { scroll-behavior: auto; }
     }
+  
+    /* === STOCKFISH 16 ENGINE + MULTI-STREAM + LANDSCAPE PLAYER UPGRADES === */
+    .yt-wrap.landscape-fs {
+      position: fixed !important; inset: 0 !important; z-index: 9500 !important;
+      width: 100vw !important; height: 100dvh !important; aspect-ratio: auto !important;
+      border-radius: 0 !important; background: #000 !important;
+    }
+    .yt-fs-exit {
+      display: none; position: fixed; top: 14px; right: 14px; z-index: 9600;
+      padding: 8px 14px; border-radius: 999px; background: rgba(7, 13, 30, 0.85);
+      border: 1px solid rgba(217, 180, 90, 0.6); color: #fff; font-weight: 700; font-size: 13px;
+      backdrop-filter: blur(8px);
+    }
+    .yt-wrap.landscape-fs ~ .yt-fs-exit, .yt-fs-exit.show { display: inline-flex; align-items: center; gap: 6px; }
+    .stream-slots {
+      display: flex; align-items: center; gap: 6px; padding: 8px 12px;
+      border-top: 1px solid var(--line); overflow-x: auto; scrollbar-width: none;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .stream-slots::-webkit-scrollbar { display: none; }
+    .slot-chip {
+      flex-shrink: 0; padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+      border: 1px solid var(--line); background: var(--surface-2, rgba(255,255,255,0.05));
+      color: var(--muted); transition: all 0.18s ease; white-space: nowrap;
+    }
+    .slot-chip.active, .slot-chip:hover {
+      background: rgba(217, 180, 90, 0.18); border-color: #D9B45A; color: var(--text);
+    }
+    .board-eval-grid { display: flex; gap: 8px; align-items: stretch; }
+    .eval-bar {
+      width: 24px; min-height: 220px; border-radius: 7px; overflow: hidden;
+      background: #1c2230; border: 1px solid var(--line); position: relative;
+      flex-shrink: 0; display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .eval-fill-w { width: 100%; height: 50%; background: linear-gradient(180deg, #f8fafc, #dce3ef); transition: height 0.5s ease; }
+    .eval-lbl {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      font-family: ui-monospace, SFMono-Regular, monospace; font-size: 9px; font-weight: 800;
+      padding: 1px 2px; border-radius: 3px; z-index: 3; white-space: nowrap;
+    }
+    .eval-lbl.top { top: 4px; color: #f8fafc; background: rgba(15, 23, 42, 0.85); }
+    .eval-lbl.bot { bottom: 4px; color: #0f172a; background: rgba(248, 250, 252, 0.92); }
+    .board-eval-grid .board-wrap { flex: 1; position: relative; }
+    .sf-arrow-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
+    .sf-card {
+      margin-top: 10px; padding: 11px 12px; border-radius: 12px;
+      background: rgba(12, 20, 44, 0.55); border: 1px solid var(--line);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    [data-theme="light"] .sf-card { background: rgba(14, 24, 56, 0.04); }
+    .sf-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .sf-title { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #D9B45A; }
+    .sf-score { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 16px; font-weight: 800; color: var(--text); }
+    .sf-meta { font-size: 11px; color: var(--muted); }
+    .wdl-track { height: 9px; border-radius: 999px; overflow: hidden; display: flex; background: #1e293b; }
+    .wdl-w { background: #f4efe4; transition: width 0.45s ease; }
+    .wdl-d { background: #8e9abd; transition: width 0.45s ease; }
+    .wdl-b { background: #2c354c; transition: width 0.45s ease; }
+    .wdl-row { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--muted); }
+    .sf-pvs { display: flex; flex-direction: column; gap: 5px; }
+    .sf-pv-btn {
+      display: flex; align-items: center; gap: 8px; width: 100%; text-align: left;
+      padding: 6px 9px; border-radius: 8px; border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03); font-size: 12px; color: var(--text);
+      transition: border-color 0.18s ease, background 0.18s ease;
+    }
+    .sf-pv-btn:hover { border-color: #D9B45A; background: rgba(217, 180, 90, 0.1); }
+    .sf-pv-cp { font-family: ui-monospace, SFMono-Regular, monospace; font-weight: 800; color: #D9B45A; min-width: 46px; }
+    .sf-spark { height: 34px; width: 100%; border-radius: 7px; background: rgba(0, 0, 0, 0.22); border: 1px solid var(--line); overflow: hidden; }
+    @media (max-width: 430px) {
+      .eval-bar { width: 20px; }
+      .eval-lbl { font-size: 8px; }
+    }
   </style>
 </head>
 <body>
@@ -666,6 +739,14 @@
                   </div>
                   <button type="button" class="btn btn-primary btn-sm unmute-chip" id="unmuteChip" data-i18n="unmute">Ovozni yoqish</button>
                 </div>
+                <button type="button" class="yt-fs-exit" id="ytFsExitBtn">✕ Yopish</button>
+              </div>
+              <div class="stream-slots" id="streamSlots">
+                <button type="button" class="slot-chip active" data-slot="auto">⚡ Auto (@uzchess)</button>
+                <button type="button" class="slot-chip" data-slot="slot1">📺 Efir 1</button>
+                <button type="button" class="slot-chip" data-slot="slot2">📺 Efir 2</button>
+                <button type="button" class="slot-chip" id="scanLiveBtn">🔍 Efirlarni yangilash</button>
+                <a class="slot-chip" id="openYtAppPip" href="https://www.youtube.com/@uzchess/streams" target="_blank" rel="noopener">↗ YouTube ilovasida (PiP/Fon)</a>
               </div>
               <div class="yt-bar">
                 <div class="yt-now">
@@ -678,6 +759,9 @@
                   </button>
                   <button type="button" class="icon-btn" id="ytFloatBtn" aria-label="Mini oyna">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="12" y="11" width="8" height="6" rx="1" fill="currentColor" fill-opacity=".3"/></svg>
+                  </button>
+                  <button type="button" class="icon-btn" id="ytLandscapeBtn" aria-label="Yonlama to‘liq ekran" title="Yonlama (Landscape)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M9 12h6M13 10l2 2-2 2"/></svg>
                   </button>
                   <button type="button" class="icon-btn" id="ytFsBtn" aria-label="To‘liq ekran">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
@@ -718,11 +802,45 @@
             </div>
             <div id="tabBoard">
               <div class="clock-row" id="clockTop"><span class="nm"><span class="piece-dot b"></span><span>—</span></span><span class="clock">--:--</span></div>
-              <div class="board-wrap">
-                <div class="board" id="board" aria-label="Shaxmat doskasi"></div>
-                <div class="board-empty" id="boardEmpty">Partiya boshlanishi bilan yurishlar shu yerda real vaqtda paydo bo‘ladi.</div>
+              <div class="board-eval-grid">
+                <div class="eval-bar" id="evalBar" title="Stockfish 16 Evaluation">
+                  <span class="eval-lbl top" id="evalLblTop"></span>
+                  <div class="eval-fill-w" id="evalFillW"></div>
+                  <span class="eval-lbl bot" id="evalLblBot">0.0</span>
+                </div>
+                <div class="board-wrap">
+                  <div class="board" id="board" aria-label="Shaxmat doskasi"></div>
+                  <svg class="sf-arrow-svg" id="sfArrowSvg" viewBox="0 0 800 800"></svg>
+                  <div class="board-empty" id="boardEmpty">Partiya boshlanishi bilan yurishlar shu yerda real vaqtda paydo bo‘ladi.</div>
+                </div>
               </div>
               <div class="clock-row" id="clockBottom"><span class="nm"><span class="piece-dot w"></span><span>—</span></span><span class="clock">--:--</span></div>
+              <div class="sf-card" id="sfCard">
+                <div class="sf-top">
+                  <div class="sf-title"><span>♟ Stockfish 16</span><span class="sf-score" id="sfScore">+0.00</span></div>
+                  <div class="controls">
+                    <span class="sf-meta" id="sfDepth">Depth --</span>
+                    <span class="sf-meta" id="sfQuality">• Tayyor</span>
+                    <button type="button" class="btn btn-sm" id="sfRefreshBtn" style="min-height:26px;padding:2px 8px;font-size:11px">⚡ Tahlil</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="wdl-track">
+                    <div class="wdl-w" id="sfWdlW" style="width:35%"></div>
+                    <div class="wdl-d" id="sfWdlD" style="width:35%"></div>
+                    <div class="wdl-b" id="sfWdlB" style="width:30%"></div>
+                  </div>
+                  <div class="wdl-row">
+                    <span id="sfWdlWTxt">Oq: 35%</span>
+                    <span id="sfWdlDTxt">Durang: 35%</span>
+                    <span id="sfWdlBTxt">Qora: 30%</span>
+                  </div>
+                </div>
+                <div class="sf-pvs" id="sfPvList">
+                  <div class="sf-meta">Eng yaxshi keyingi yurishlar hisoblanmoqda…</div>
+                </div>
+                <div class="sf-spark"><svg id="sfSparkSvg" viewBox="0 0 300 34" width="100%" height="34" preserveAspectRatio="none"></svg></div>
+              </div>
               <div class="moves" id="moves" aria-live="polite"></div>
               <div class="board-foot">
                 <span id="boardInfo">Manba: Lichess rasmiy translyatsiyasi</span>
@@ -2140,6 +2258,310 @@
     setClockRow('clockTop', b ? (topIsWhite ? b.white : b.black) : null, topIsWhite ? 'w' : 'b', nameFallback(topIsWhite ? 'w' : 'b'), b);
     setClockRow('clockBottom', b ? (topIsWhite ? b.black : b.white) : null, topIsWhite ? 'b' : 'w', nameFallback(topIsWhite ? 'b' : 'w'), b);
   }
-  </script>
+  
+  /* =======================================================================
+     12. STOCKFISH 16 ENGINE (CLOUD + ONLINE API + LOKAL FALLBACK)
+         + MULTI-STREAM @UZCHESS RESOLVER + LANDSCAPE / PIP / MEDIA SESSION
+     ======================================================================= */
+  const SF = {
+    lastFen: '', bestUci: '', evalHistory: [], whiteBottom: true, lastCp: 0,
+
+    cpToWdl(cp) {
+      const c = Math.max(-1200, Math.min(1200, cp));
+      const wWin = 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * c)) - 1);
+      const draw = Math.max(8, Math.round(44 * Math.exp(-Math.pow(c / 260, 2))));
+      const rem = 100 - draw;
+      const wPct = Math.max(1, Math.min(98, Math.round((wWin / 100) * rem)));
+      const bPct = Math.max(1, 100 - draw - wPct);
+      return { wPct, draw, bPct, barH: Math.max(5, Math.min(95, wWin)) };
+    },
+
+    heuristicCp(fen) {
+      const val = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
+      let sc = 0;
+      ((fen || '').split(' ')[0] || '').split('/').forEach((row, r) => {
+        let col = 0;
+        for (const ch of row) {
+          if (/\d/.test(ch)) { col += +ch; continue; }
+          const v = (val[ch.toLowerCase()] || 0) + (r >= 2 && r <= 5 && col >= 2 && col <= 5 ? 14 : 0);
+          sc += ch === ch.toUpperCase() ? v : -v;
+          col++;
+        }
+      });
+      return sc;
+    },
+
+    drawArrow(uci) {
+      const svg = $('sfArrowSvg'); if (!svg) return;
+      if (!uci || uci.length < 4) { svg.innerHTML = ''; return; }
+      const files = 'abcdefgh';
+      const pt = sq => {
+        const fc = files.indexOf(sq[0]), rr = 8 - Number(sq[1]);
+        const vc = this.whiteBottom ? fc : 7 - fc, vr = this.whiteBottom ? rr : 7 - rr;
+        return { x: vc * 100 + 50, y: vr * 100 + 50 };
+      };
+      const a = pt(uci.slice(0, 2)), b = pt(uci.slice(2, 4));
+      svg.innerHTML = `<defs><marker id="sfArrHead" markerWidth="4" markerHeight="4" refX="2.5" refY="2" orient="auto"><polygon points="0 0, 4 2, 0 4" fill="rgba(129, 182, 76, 0.95)"/></marker></defs><line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(129, 182, 76, 0.88)" stroke-width="18" stroke-linecap="round" marker-end="url(#sfArrHead)"/>`;
+    },
+
+    renderSpark() {
+      const svg = $('sfSparkSvg'); if (!svg) return;
+      const arr = this.evalHistory.length > 1 ? this.evalHistory : [0, 0];
+      const pts = arr.map((cp, i) => {
+        const x = (i / Math.max(1, arr.length - 1)) * 300;
+        const y = 17 - (Math.max(-500, Math.min(500, cp)) / 500) * 14;
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      }).join(' ');
+      svg.innerHTML = `<line x1="0" y1="17" x2="300" y2="17" stroke="rgba(255,255,255,0.16)" stroke-dasharray="3,3"/><polyline fill="none" stroke="#D9B45A" stroke-width="2" points="${pts}"/>`;
+    },
+
+    applyEval(cp, mate, depthText, lines, whiteName, blackName) {
+      const effCp = mate ? (mate > 0 ? 1200 : -1200) : cp;
+      const wdl = this.cpToWdl(effCp);
+      const txt = mate ? `M${Math.abs(mate)}` : ((cp >= 0 ? '+' : '') + (cp / 100).toFixed(2));
+      $('sfScore').textContent = txt;
+      $('sfDepth').textContent = depthText;
+      $('evalFillW').style.height = (this.whiteBottom ? wdl.barH : 100 - wdl.barH) + '%';
+      $('evalLblTop').textContent = (this.whiteBottom ? effCp < 0 : effCp >= 0) ? txt : '';
+      $('evalLblBot').textContent = (this.whiteBottom ? effCp >= 0 : effCp < 0) ? txt : '';
+
+      $('sfWdlW').style.width = wdl.wPct + '%';
+      $('sfWdlD').style.width = wdl.draw + '%';
+      $('sfWdlB').style.width = wdl.bPct + '%';
+      $('sfWdlWTxt').textContent = `${whiteName}: ${wdl.wPct}%`;
+      $('sfWdlDTxt').textContent = `Durang: ${wdl.draw}%`;
+      $('sfWdlBTxt').textContent = `${blackName}: ${wdl.bPct}%`;
+
+      const delta = Math.abs(cp - this.lastCp);
+      this.lastCp = cp;
+      const q = delta <= 25 ? '★ Eng yaxshi' : delta <= 65 ? '✓ Yaxshi' : delta <= 140 ? '?! Noaniq' : delta <= 260 ? '? Xato' : '?? Qo‘pol xato';
+      $('sfQuality').textContent = '• ' + q;
+
+      this.evalHistory.push(cp);
+      if (this.evalHistory.length > 40) this.evalHistory.shift();
+      this.renderSpark();
+
+      const pvEl = $('sfPvList');
+      if (lines && lines.length) {
+        this.bestUci = (lines[0].uci || '').slice(0, 4);
+        this.drawArrow(this.bestUci);
+        pvEl.innerHTML = lines.slice(0, 3).map((ln, idx) =>
+          `<button type="button" class="sf-pv-btn" data-uci="${esc((ln.uci || '').slice(0, 4))}"><span class="sf-pv-cp">${esc(ln.score)}</span><span>${idx + 1}. ${esc(ln.moves)}</span></button>`
+        ).join('');
+      } else {
+        this.bestUci = ''; this.drawArrow('');
+        pvEl.innerHTML = '<div class="sf-meta">Lokal baholash faol</div>';
+      }
+    },
+
+    async evaluate(fen, force = false) {
+      const targetFen = fen || START_FEN;
+      const n = app.viewRound ?? live.activeRound;
+      const g = CFG.games[n - 1];
+      const b = boardCache[n];
+      const sindIsWhite = b ? isSind(b.white.name) : g?.white === 'uz';
+      this.whiteBottom = (sindIsWhite ? true : false) !== app.flip;
+      const wName = sindIsWhite ? 'Sindorov' : 'Gukesh';
+      const bName = sindIsWhite ? 'Gukesh' : 'Sindorov';
+
+      if (!force && targetFen === this.lastFen) { this.drawArrow(this.bestUci); return; }
+      this.lastFen = targetFen;
+      $('sfDepth').textContent = 'Hisoblanmoqda…';
+
+      // 1) Lichess Stockfish 16+ Cloud Eval (multiPv=3, depth 30–50)
+      try {
+        const r = await fetch(`https://lichess.org/api/cloud-eval?fen=${encodeURIComponent(targetFen)}&multiPv=3`, { headers: { Accept: 'application/json' } });
+        if (r.ok) {
+          const d = await r.json();
+          if (d?.pvs?.length) {
+            const top = d.pvs[0];
+            const lines = d.pvs.map(p => ({
+              score: p.mate ? `M${Math.abs(p.mate)}` : ((p.cp >= 0 ? '+' : '') + ((p.cp || 0) / 100).toFixed(2)),
+              uci: (p.moves || '').split(' ')[0] || '',
+              moves: (p.moves || '').split(' ').slice(0, 5).join(' ')
+            }));
+            this.applyEval(top.cp ?? 0, top.mate ?? null, `Depth ${d.depth || 32} • Cloud`, lines, wName, bName);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      // 2) Stockfish 16 Online REST API (har qanday yangi pozitsiya uchun)
+      try {
+        const r2 = await fetch(`https://stockfish.online/api/s/v2.php?fen=${encodeURIComponent(targetFen)}&depth=14`);
+        if (r2.ok) {
+          const d2 = await r2.json();
+          if (d2 && d2.success) {
+            const cp = Math.round((Number(d2.evaluation) || 0) * 100);
+            const best = (d2.bestmove || '').split(' ')[1] || '';
+            const pv = (d2.continuation || best).split(' ').slice(0, 5).join(' ');
+            this.applyEval(cp, d2.mate || null, 'Depth 14 • SF16', [{ score: (cp >= 0 ? '+' : '') + (cp / 100).toFixed(2), uci: best, moves: pv }], wName, bName);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      // 3) Offline heuristic fallback
+      const h = this.heuristicCp(targetFen);
+      this.applyEval(h, null, 'Lokal Tahlil', [], wName, bName);
+    }
+  };
+
+  // Hook renderBoard so Stockfish updates automatically on every live move / flip
+  const _origRenderBoard = renderBoard;
+  renderBoard = function () {
+    _origRenderBoard();
+    const n = app.viewRound ?? live.activeRound;
+    const b = boardCache[n];
+    SF.evaluate(b?.fen || START_FEN, false);
+  };
+
+  // Multi-Stream Slot Manager (fixes 2 simultaneous live streams on @uzchess!)
+  const streamSlots = store.get('wcc_stream_slots', { active: 'auto', slot1: '', slot2: '' });
+  function saveSlots() { store.set('wcc_stream_slots', streamSlots); }
+
+  function updateSlotUi() {
+    document.querySelectorAll('#streamSlots [data-slot]').forEach(el => {
+      el.classList.toggle('active', el.dataset.slot === streamSlots.active);
+    });
+    const vid = ytIdFrom(CFG.youtubeVideoId);
+    $('openYtAppPip').href = vid ? `https://www.youtube.com/watch?v=${vid}` : UZCHESS.streamsUrl;
+  }
+
+  // Upgrade loadVideos to also auto-populate Efir 1 & Efir 2 slots for 2+ live streams!
+  const _origLoadVideos = loadVideos;
+  loadVideos = async function () {
+    await _origLoadVideos();
+    const vids = [...$('videoRow').querySelectorAll('[data-vid]')].map(b => ({ id: b.dataset.vid, title: b.textContent.trim() }));
+    if (vids.length) {
+      if (!streamSlots.slot1) streamSlots.slot1 = vids[0].id;
+      if (!streamSlots.slot2 && vids[1]) streamSlots.slot2 = vids[1].id;
+      saveSlots();
+      // If Auto channel stream errored (2 simultaneous streams bug), auto-switch to Efir 1!
+      if (yt.errored && streamSlots.active === 'auto' && streamSlots.slot1) {
+        streamSlots.active = 'slot1';
+        CFG.youtubeVideoId = streamSlots.slot1;
+        saveSlots(); save(); updateSlotUi();
+        yt.mount('multi-stream-fallback');
+        toast('Kanalda bir nechta efir aniqlandi — Efir 1 avtomatik ulandi.');
+      }
+    }
+  };
+
+  // Upgrade yt.onError to automatically recover when channel has 2+ live streams
+  const _origYtError = yt.onError.bind(yt);
+  yt.onError = function () {
+    if (!ytIdFrom(CFG.youtubeVideoId) && streamSlots.slot1) {
+      streamSlots.active = 'slot1';
+      CFG.youtubeVideoId = streamSlots.slot1;
+      saveSlots(); save(); updateSlotUi();
+      yt.mount('auto-slot1');
+      toast('Efir 1 ga o‘tildi (2-efir uchun "Efir 2" tugmasini bosing).');
+      return;
+    }
+    _origYtError();
+  };
+
+  // Media Session API + Auto-Resume on Return + Landscape Fullscreen + Document PiP
+  function updateMediaSession() {
+    if (!('mediaSession' in navigator)) return;
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: yt.title || 'Sindarov vs Gukesh — Jonli efir',
+        artist: 'UzChess (@uzchess) • FIDE 2026',
+        album: 'Shaxmat Jahon Toji 2026',
+        artwork: [
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' }
+        ]
+      });
+      navigator.mediaSession.setActionHandler('play', () => yt.player?.playVideo?.());
+      navigator.mediaSession.setActionHandler('pause', () => yt.player?.pauseVideo?.());
+    } catch (e) {}
+  }
+
+  let wasPlayingBeforeHide = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      wasPlayingBeforeHide = yt.state === 1;
+    } else if (document.visibilityState === 'visible' && wasPlayingBeforeHide) {
+      setTimeout(() => { try { yt.player?.playVideo?.(); wake.on(); } catch (e) {} }, 350);
+    }
+  });
+
+  // Landscape orientation lock on fullscreen enter / unlock on exit
+  document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+      try { screen.orientation?.lock?.('landscape')?.catch?.(() => {}); } catch (e) {}
+    } else {
+      try { screen.orientation?.unlock?.(); } catch (e) {}
+      $('ytWrap').classList.remove('landscape-fs');
+      $('ytFsExitBtn').classList.remove('show');
+    }
+  });
+
+  async function enterLandscapeMode() {
+    const wrap = $('ytWrap');
+    const isNow = wrap.classList.toggle('landscape-fs');
+    $('ytFsExitBtn').classList.toggle('show', isNow);
+    if (isNow) {
+      try { await (wrap.requestFullscreen || wrap.webkitRequestFullscreen)?.call(wrap); } catch (e) {}
+      try { await screen.orientation?.lock?.('landscape'); } catch (e) {}
+    } else {
+      if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+      try { screen.orientation?.unlock?.(); } catch (e) {}
+    }
+  }
+
+  // Bind new controls
+  $('sfRefreshBtn').addEventListener('click', () => { const n = app.viewRound ?? live.activeRound; SF.evaluate(boardCache[n]?.fen || START_FEN, true); });
+  $('sfPvList').addEventListener('click', e => { const b = e.target.closest('[data-uci]'); if (b) SF.drawArrow(b.dataset.uci); });
+  $('ytLandscapeBtn').addEventListener('click', enterLandscapeMode);
+  $('ytFsExitBtn').addEventListener('click', enterLandscapeMode);
+  $('scanLiveBtn').addEventListener('click', () => { loadVideos(); toast('UzChess efirlari tekshirilmoqda…'); });
+
+  // Enhanced PiP: Try Document Picture-in-Picture API first, else in-app floating mini-player
+  $('ytFloatBtn').addEventListener('click', async () => {
+    if ('documentPictureInPicture' in window && !$('ytWrap').classList.contains('floating')) {
+      try {
+        const pipWin = await window.documentPictureInPicture.requestWindow({ width: 380, height: 220 });
+        const fr = document.createElement('iframe');
+        fr.src = yt.src(); fr.style.cssText = 'width:100%;height:100%;border:0;'; fr.allow = 'autoplay; encrypted-media; picture-in-picture'; fr.allowFullscreen = true;
+        pipWin.document.body.style.cssText = 'margin:0;background:#000;overflow:hidden;';
+        pipWin.document.body.appendChild(fr);
+        $('ytWrap').classList.remove('floating');
+        return;
+      } catch (e) {}
+    }
+  });
+
+  $('streamSlots').addEventListener('click', e => {
+    const btn = e.target.closest('[data-slot]'); if (!btn) return;
+    const s = btn.dataset.slot;
+    streamSlots.active = s;
+    if (s === 'auto') CFG.youtubeVideoId = '';
+    else if (s === 'slot1') {
+      if (!streamSlots.slot1) { $('ytOverride').hidden = false; $('ytInput').focus(); toast('Efir 1 uchun YouTube havola kiriting.'); return; }
+      CFG.youtubeVideoId = streamSlots.slot1;
+    } else if (s === 'slot2') {
+      if (!streamSlots.slot2) { $('ytOverride').hidden = false; $('ytInput').focus(); toast('Efir 2 uchun YouTube havola kiriting.'); return; }
+      CFG.youtubeVideoId = streamSlots.slot2;
+    }
+    saveSlots(); save(); updateSlotUi(); yt.mount('slot-' + s);
+  });
+
+  // Also save custom ytApply into active slot1/slot2
+  $('ytApply').addEventListener('click', () => {
+    const id = ytIdFrom($('ytInput').value);
+    if (!id) return;
+    if (streamSlots.active === 'slot2') streamSlots.slot2 = id;
+    else { streamSlots.active = 'slot1'; streamSlots.slot1 = id; }
+    saveSlots(); updateSlotUi(); updateMediaSession();
+  });
+
+  updateSlotUi();
+  updateMediaSession();
+  setTimeout(() => SF.evaluate(boardCache[app.viewRound ?? live.activeRound]?.fen || START_FEN, true), 900);
+</script>
 </body>
 </html>
